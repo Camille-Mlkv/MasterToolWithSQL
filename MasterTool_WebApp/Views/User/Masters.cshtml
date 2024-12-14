@@ -1,0 +1,42 @@
+﻿@model List<MasterTool_WebApp.ViewModels.MasterWithInfoViewModel>
+
+@{
+    ViewData["Title"] = "Список клиентов";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Our clients</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Имя пользователя</th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Номер телефона</th>
+                    <th>Количество заказов</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@Model[i].UserName</td>
+                        <td>@Model[i].Name</td>
+                        <td>@Model[i].Surname</td>
+                        <td>@Model[i].PhoneNumber</td>
+                        <td>@Model[i].OrderCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">Нет мастеров для отображения.</div>
+    }
+</div>

@@ -1,0 +1,27 @@
+﻿@model List<PickupPoint>
+
+@{
+    ViewData["Title"] = "Pickup Points";
+}
+
+<h2>Pickup Points</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var point in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@point.Name</h5>
+                        <p class="card-text">
+                            <strong>Address:</strong> @point.Address<br />
+                            <strong>Phone:</strong> @point.PhoneNumber<br />
+                            <strong>Working Hours:</strong> @point.WorkingHours
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

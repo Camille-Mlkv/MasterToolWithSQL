@@ -1,0 +1,37 @@
+﻿@model List<MasterTool_WebApp.ViewModels.FeedbackWithClientNameViewModel>
+
+<h2>Feedbacks</h2>
+
+<link rel="stylesheet" href="/css/feedbacks.css">
+
+
+@if (Model != null && Model.Any())
+{
+    <div class="reviews-container">
+        @foreach (var feedback in Model)
+        {
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="client-name">@feedback.ClientName</span>
+                    <div class="rating">
+                        @for (var i = 0; i < feedback.Rating; i++)
+                        {
+                            <span class="star">★</span>
+                        }
+                        @for (var i = feedback.Rating; i < 5; i++)
+                        {
+                            <span class="star empty">☆</span>
+                        }
+                    </div>
+                </div>
+                <div class="review-text">
+                    @feedback.Text
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No feedbacks available.</p>
+}

@@ -1,8 +1,81 @@
-﻿@{
+﻿@using MasterTool_WebApp.LocalData;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@* Проверка, авторизован ли пользователь *@
+@if (string.IsNullOrEmpty(CurrentUser.UserName))
+{
+    <div class="text-center">
+        <h1 class="display-4">Hi! Meet Master Tool web application</h1>
+        <p>Welcome to our platform. Please log in or register to access additional features.</p>
+    </div>
+}
+else
+{
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 bg-dark">
+            <div class="list-group" style="padding: 10px;">
+                @if (CurrentUser.IsClient)
+                {
+                    <a href="/ClientDashboard" class="list-group-item list-group-item-action mb-2" style="border: 1px solid #ddd; border-radius: 5px;">
+                        Client Dashboard
+                    </a>
+                }
+                @if (CurrentUser.IsMaster)
+                {
+                    <a href="/MasterDashboard" class="list-group-item list-group-item-action mb-2" style="border: 1px solid #ddd; border-radius: 5px;">
+                        Master Dashboard
+                    </a>
+                }
+                @if (CurrentUser.IsAdmin)
+                {
+                    <a class="list-group-item list-group-item-action mb-2" style="border: 1px solid #ddd; border-radius: 5px;" asp-area="" asp-controller="User" asp-action="Clients">
+                        Clients
+                    </a>
+                    <a class="list-group-item list-group-item-action mb-2" style="border: 1px solid #ddd; border-radius: 5px;" asp-area="" asp-controller="User" asp-action="Masters">
+                        Masters
+                    </a>
+                    <a class="list-group-item list-group-item-action mb-2" style="border: 1px solid #ddd; border-radius: 5px;" asp-area="" asp-controller="Service" asp-action="Index">
+                        Services
+                    </a>
+                    <a class="list-group-item list-group-item-action mb-2" style="border: 1px solid #ddd; border-radius: 5px;" asp-area="" asp-controller="Feedback" asp-action="Index">
+                        Feedbacks
+                    </a>
+                    <a class="list-group-item list-group-item-action mb-2" style="border: 1px solid #ddd; border-radius: 5px;" asp-area="" asp-controller="Detail" asp-action="Index">
+                        Storage
+                    </a>
+                    <a class="list-group-item list-group-item-action mb-2" style="border: 1px solid #ddd; border-radius: 5px;" asp-area="" asp-controller="PickupPoint" asp-action="Index">
+                        Pick-up points
+                    </a>
+                }
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-md-9">
+            <h2>
+                @if (CurrentUser.IsClient)
+                {
+                    <span>Welcome to your Client Dashboard!</span>
+                }
+                else if (CurrentUser.IsMaster)
+                {
+                    <span>Welcome to your Master Dashboard!</span>
+                }
+                else if (CurrentUser.IsAdmin)
+                {
+                    <span>Welcome to your Admin Dashboard!</span>
+                }
+                else
+                {
+                    <span>Welcome to your Dashboard!</span>
+                }
+            </h2>
+            <p>Here you can manage your account and explore more features.</p>
+        </div>
+    </div>
+
+}

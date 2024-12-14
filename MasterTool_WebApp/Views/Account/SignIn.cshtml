@@ -1,0 +1,32 @@
+﻿@model MasterTool_WebApp.ViewModels.SignInViewModel
+
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<h2 class="text-center text-dark">Вход</h2>
+
+<form method="post" asp-action="SignIn">
+    <div class="container border p-4 bg-light text-light">
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type="text" id="userName" name="UserName" value="@Model.UserName" required class="form-control" placeholder="Имя пользователя" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type="password" id="password" name="Password" value="@Model.Password" required class="form-control" placeholder="Пароль" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <button type="submit" class="btn btn-success w-100">Войти</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

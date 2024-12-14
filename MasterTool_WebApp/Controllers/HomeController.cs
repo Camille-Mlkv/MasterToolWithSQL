@@ -1,5 +1,7 @@
 using MasterTool_WebApp.Models;
+using MasterTool_WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Diagnostics;
 
 namespace MasterTool_WebApp.Controllers
@@ -7,10 +9,9 @@ namespace MasterTool_WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
-            _logger = logger;
+             _logger = logger;
         }
 
         public IActionResult Index()

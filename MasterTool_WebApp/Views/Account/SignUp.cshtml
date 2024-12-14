@@ -1,0 +1,54 @@
+﻿@model MasterTool_WebApp.ViewModels.SignUpViewModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<h2 class="text-center text-dark">Регистрация</h2>
+
+<form method="post" asp-action="SignUp">
+    <div class="container border p-4 bg-light text-light">
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type="text" id="userName" name="UserName" value="@Model.UserName" required class="form-control" placeholder="Имя пользователя" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type="password" id="password" name="Password" value="@Model.Password" required class="form-control" placeholder="Пароль" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type="text" id="phoneNumber" name="PhoneNumber" value="@Model.PhoneNumber" required class="form-control" placeholder="Номер телефона"
+                       pattern="^(\+?[\d\(\)\-\s]+)$" title="Номер телефона может содержать только цифры, дефисы, скобки и плюс." />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type="text" id="name" name="Name" value="@Model.Name" required class="form-control" placeholder="Имя" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <input type="text" id="surname" name="Surname" value="@Model.Surname" required class="form-control" placeholder="Фамилия" />
+                <span asp-validation-for="Surname" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <select id="role" name="SelectedRole" value="@Model.SelectedRole" required class="form-select">
+                    <option value="" disabled selected>--Роль--</option>
+                    @foreach (var role in Model.Roles)
+                    {
+                        <option value="@role.RoleId">@role.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12 col-md-6 offset-md-3 pb-2">
+                <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,64 @@
+﻿/* Общий контейнер отзывов */
+.reviews-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Индивидуальная карточка отзыва */
+.review-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s;
+}
+
+    .review-card:hover {
+        transform: scale(1.03); /* Небольшое увеличение при наведении */
+    }
+
+/* Заголовок карточки */
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Имя клиента */
+.client-name {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Рейтинг */
+.rating {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    font-size: 18px;
+    color: #f5c518; /* Золотой цвет для звезд */
+}
+
+    .star.empty {
+        color: #ccc; /* Серый цвет для пустых звезд */
+    }
+
+/* Текст отзыва */
+.review-text {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+    margin-top: 10px;
+}

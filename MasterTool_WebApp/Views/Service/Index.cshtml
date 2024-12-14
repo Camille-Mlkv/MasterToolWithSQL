@@ -1,0 +1,65 @@
+﻿@model List<Service>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Список услуг</h2>
+
+    <div class="text-right mb-3">
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus"></i> Добавить услугу
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Цена</th>
+                    <th>Доступность</th>
+                    <th>Обновить</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@Model[i].Name</td>
+                        <td>@Model[i].Description</td>
+                        <td>@Model[i].Price</td>
+                        <td>
+                            @if (Model[i].IsAvailable)
+                            {
+                                <i class="fas fa-check-circle text-success" title="Доступна"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-times-circle text-danger" title="Не доступна"></i>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@Model[i].ServiceId" class="btn btn-link">
+                                <i class="fas fa-edit" title="Редактировать"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <form asp-action="Delete" asp-route-id="@Model[i].ServiceId" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить эту услугу?');">
+                                <button type="submit" class="btn btn-link text-danger">
+                                    <i class="fas fa-trash" title="Удалить"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">Услуги не найдены.</div>
+    }
+</div>
