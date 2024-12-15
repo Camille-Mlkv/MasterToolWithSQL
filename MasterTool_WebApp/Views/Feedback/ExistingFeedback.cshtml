@@ -1,0 +1,22 @@
+﻿@model MasterTool_WebApp.Models.Feedback
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title">Ваш отзыв</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Order ID:</strong> @Model.OrderId</p>
+            <p><strong>Комментарий:</strong></p>
+            <blockquote class="blockquote">
+                <p class="mb-0">@Model.Text</p>
+            </blockquote>
+            <p>
+                <strong>Рейтинг:</strong>
+                <span class="badge bg-success">@Model.Rating / 5</span>
+            </p>
+        </div>
+        <div class="card-footer text-end">
+        </div>
+    </div>
+</div>

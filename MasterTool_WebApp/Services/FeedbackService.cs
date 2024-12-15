@@ -1,6 +1,8 @@
 ﻿using MasterTool_WebApp.Models;
 using MasterTool_WebApp.Services.Repository;
 using MasterTool_WebApp.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace MasterTool_WebApp.Services
 {
@@ -30,6 +32,36 @@ namespace MasterTool_WebApp.Services
                                 users u ON r.client_id = u.user_id;
                             ";
             return await _rawSqlRepository.ExecuteRawSqlQueryAsync<FeedbackWithClientNameViewModel>(query);
+        }
+
+        public async Task<List<Feedback>> FindFeedbackById(int orderId)
+        {
+            string query = @"SELECT *
+                            FROM  feedbacks f
+                            WHERE order_id=@OrderId";
+
+            var parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@OrderId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = orderId }
+            };
+            return await _rawSqlRepository.ExecuteRawSqlQueryAsync<Feedback>(query,parameters);
+        }
+
+        public async Task CreateFeedback(Feedback model)
+        {
+            var query = @"
+                INSERT INTO Feedbacks (order_id, text, rating)
+                VALUES (@OrderId, @Text, @Rating);
+            ";
+
+            var parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@OrderId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = model.OrderId },
+                new NpgsqlParameter("@Text", NpgsqlTypes.NpgsqlDbType.Varchar) { Value = model.Text },
+                new NpgsqlParameter("@Rating", NpgsqlTypes.NpgsqlDbType.Integer) { Value = model.Rating },
+            };
+
+            await _rawSqlRepository.ExecuteNonQueryAsync(query,parameters);
         }
     }
 }

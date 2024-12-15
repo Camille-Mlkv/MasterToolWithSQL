@@ -1,0 +1,53 @@
+﻿@model MasterTool_WebApp.ViewModels.CreateRequestViewModel
+
+@{
+    ViewData["Title"] = "Create Request";
+}
+
+<h2 class="text-center mt-4">Create a New Request</h2>
+
+<div class="container mt-4">
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label for="ProblemDescription" class="form-label">Problem Description</label>
+            <textarea class="form-control" id="ProblemDescription" name="ProblemDescription" rows="3" required>@Model.ProblemDescription</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="ManufacturerName" class="form-label">Manufacturer Name</label>
+            <input type="text" class="form-control" id="ManufacturerName" name="ManufacturerName" 
+                   value="@Model.ManufacturerName" maxlength="50" placeholder="e.g., Apple, Samsung" />
+        </div>
+
+        <div class="mb-3">
+            <label for="UsageTimeYears" class="form-label">Usage Time</label>
+            <div class="row">
+                <div class="col">
+                    <input type="number" class="form-control" id="UsageTimeYears" name="UsageTimeYears" 
+                           value="@Model.UsageTimeYears" min="0" placeholder="Years" required />
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" id="UsageTimeMonths" name="UsageTimeMonths" 
+                           value="@Model.UsageTimeMonths" min="0" max="11" placeholder="Months" required />
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="ServiceId" class="form-label">Select Service</label>
+            <select class="form-select" id="ServiceId" name="ServiceId" required>
+                <option value="" disabled selected>-- Select a Service --</option>
+                @foreach (var service in Model.Services)
+                {
+                    <option value="@service.ServiceId">@service.Name - @service.Price.ToString("C")</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Request</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

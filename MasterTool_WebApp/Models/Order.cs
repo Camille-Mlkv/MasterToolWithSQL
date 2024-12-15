@@ -6,32 +6,32 @@ namespace MasterTool_WebApp.Models
     public class Order
     {
         [Key]
+        [Column("order_id")]
         public long OrderId { get; set; }
 
         [Required]
+        [Column("creation_date")]
         public DateTime CreationDate { get; set; } = DateTime.Now; 
 
         [Required]
         [ForeignKey("User")]
+        [Column("master_id")]
         public long MasterId { get; set; } 
 
         [Required]
+        [Column("is_ready")]
         public bool IsReady { get; set; } = false; 
 
         [Required]
-        public bool IsTaken { get; set; } = false; 
-
-        [ForeignKey("PickupPoint")]
-        public int? PointId { get; set; } 
-
-        [Required]
         [ForeignKey("Request")]
-        public long RequestId { get; set; } 
+        [Column("request_id")]
+        public long RequestId { get; set; }
 
+        [Column("is_paid")]
         public bool IsPaid { get; set; } = false;
 
         [Required]
-        [Column(TypeName = "decimal(10,2)")]
+        [Column("total_price", TypeName = "decimal(10,2)")]
         [Range(0, double.MaxValue, ErrorMessage = "Total price must be a positive value.")]
         public decimal TotalPrice { get; set; } = 0;
     }

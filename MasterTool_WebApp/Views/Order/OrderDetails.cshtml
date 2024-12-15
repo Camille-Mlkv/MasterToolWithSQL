@@ -1,0 +1,98 @@
+﻿@model MasterTool_WebApp.ViewModels.OrderDetailsViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Детали заказа</title>
+    <style>
+
+        h1, h3 {
+            color: #333;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+
+            .info-section:last-child {
+                border-bottom: none;
+            }
+
+            .info-section p {
+                margin: 5px 0;
+            }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+
+        .btn-disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Детали заказа</h1>
+
+        <div class="info-section">
+            <h3>Информация о заказе</h3>
+            <p><strong>Номер заказа:</strong> @Model.OrderId</p>
+            <p><strong>Дата создания:</strong> @Model.CreationDate.ToShortDateString()</p>
+            <p><strong>Готовность:</strong> @(Model.IsReady ? "Готов" : "Не готов")</p>
+            <p><strong>Оплачен:</strong> @(Model.IsPaid ? "Да" : "Нет")</p>
+            <p><strong>Общая стоимость:</strong> @Model.TotalPrice.ToString("C")</p>
+        </div>
+
+        <div class="info-section">
+            <h3>Информация о заявке</h3>
+            <p><strong>Описание проблемы:</strong> @Model.ProblemDescription</p>
+        </div>
+
+        <div class="info-section">
+            <h3>Информация об услуге</h3>
+            <p><strong>Услуга:</strong> @Model.ServiceName</p>
+            <p><strong>Стоимость услуги:</strong> @Model.ServicePrice.ToString("C")</p>
+        </div>
+
+        <div class="info-section">
+            <h3>Информация о мастере</h3>
+            <p><strong>Мастер:</strong> @Model.MasterName</p>
+        </div>
+
+        <div>
+            @if (!Model.IsPaid)
+            {
+                <div class="text-right mb-3">
+                    <a asp-action="PayOrder" asp-route-orderId="@Model.OrderId" asp-route-orderPrice="@Model.TotalPrice.ToString("F2")" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Pay
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="text-right mb-3">
+                    <a asp-action="LeaveFeedback" asp-route-orderId="@Model.OrderId" asp-controller="Feedback" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Feedback
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>

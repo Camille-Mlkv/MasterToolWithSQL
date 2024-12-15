@@ -1,0 +1,25 @@
+﻿
+@model List<MasterTool_WebApp.ViewModels.PaymentInfoViewModel>
+
+<div class="container mt-4">
+    <h3>Информация о платежах</h3>
+    <table class="table table-bordered table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>Payment ID</th>
+                <th>Creation Date</th>
+                <th>Order Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var payment in Model)
+            {
+                <tr>
+                    <td>@payment.PaymentInfoId</td>
+                    <td>@payment.CreationDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@payment.TotalPrice.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -3,26 +3,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MasterTool_WebApp.Models
 {
-    public class Feedback
+    public class PaymentInfo
     {
         [Key]
-        [Column("feedback_id")]
-        public long FeedbackId { get; set; }
+        [Column("payment_info_id")] 
+        public long PaymentInfoId { get; set; }
 
         [Required]
-        [MaxLength(500)]
-        [Column("text")]
-        public string Text { get; set; }
+        [Column("creation_date")] 
+        public DateTime CreationDate { get; set; } = DateTime.Now;
 
         [Required]
-        [Range(1, 5)]
-        [Column("rating")]
-        public int Rating { get; set; }
+        [ForeignKey("Card")]
+        [Column("card_id")]
+        public long CardId { get; set; }
 
         [Required]
         [ForeignKey("Order")]
         [Column("order_id")]
         public long OrderId { get; set; }
+
+        public virtual CreditCard Card { get; set; }
         public virtual Order Order { get; set; }
     }
 }

@@ -1,0 +1,85 @@
+﻿@model MasterTool_WebApp.Models.CreditCard
+
+<div class="container">
+    <h2>Создать карту</h2>
+    <form method="post" id="cardForm">
+        <!-- Ввод номера карты -->
+        <div class="form-group">
+            <label for="CardNumber">Номер карты</label>
+            <input type="text" id="CardNumber" name="CardNumber" 
+                   class="form-control" maxlength="19" placeholder="1234 5678 1234 5678" 
+                   oninput="formatCardNumber(this)" required />
+            <small id="CardTypeMessage" class="form-text text-muted"></small>
+        </div>
+
+        <!-- Ввод CVV -->
+        <div class="form-group">
+            <label for="CVV">CVV</label>
+            <input type="text" id="CVV" name="CVV" 
+                   class="form-control" maxlength="3" placeholder="123" 
+                   oninput="validateCVV(this)" required />
+            <small id="CVVMessage" class="form-text text-danger" style="display: none;">Введите только цифры (3 символа).</small>
+        </div>
+
+        <!-- Выбор даты -->
+        <div class="form-group">
+            <label for="ExpiryDate">Срок действия</label>
+            <input type="date" id="ExpiryDate" name="ExpiryDate" 
+                   class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+        </div>
+
+        <!-- Кнопка отправки -->
+        <button type="submit" class="btn btn-primary">Создать карту</button>
+    </form>
+</div>
+
+<!-- Скрипты для валидации -->
+<script>
+    // Форматирование номера карты
+    function formatCardNumber(input) {
+        let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+        let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+        input.value = formattedValue;
+
+        // Определение типа карты
+        const cardTypeMessage = document.getElementById('CardTypeMessage');
+        if (/^4/.test(value)) {
+            cardTypeMessage.textContent = "Тип карты: Visa";
+            cardTypeMessage.style.color = "green";
+        } else if (/^(5[1-5]|2(2[2-9][1-9]|2[3-9][0-9]|[3-6][0-9]{2}|7[0-1][0-9]|720))/.test(value)) {
+            cardTypeMessage.textContent = "Тип карты: MasterCard";
+            cardTypeMessage.style.color = "green";
+        } else if (value.length >= 4) {
+            cardTypeMessage.textContent = "Ошибка: Номер карты не является ни Visa, ни MasterCard.";
+            cardTypeMessage.style.color = "red";
+        } else {
+            cardTypeMessage.textContent = "";
+        }
+    }
+
+    // Валидация CVV (только цифры)
+    function validateCVV(input) {
+        const cvvMessage = document.getElementById('CVVMessage');
+        if (/^\d{0,3}$/.test(input.value)) {
+            cvvMessage.style.display = "none"; // Прячем сообщение об ошибке
+        } else {
+            input.value = input.value.replace(/[^0-9]/g, ''); // Убираем нецифровые символы
+            cvvMessage.style.display = "block"; // Показываем сообщение об ошибке
+        }
+    }
+
+    // Блокировка отправки формы, если дата или другие поля невалидны
+    document.getElementById('cardForm').addEventListener('submit', function (e) {
+        const cardTypeMessage = document.getElementById('CardTypeMessage');
+        if (cardTypeMessage.textContent.includes("Ошибка")) {
+            e.preventDefault(); // Блокируем отправку формы
+            alert("Введите корректный номер карты.");
+        }
+
+        const expiryDate = document.getElementById('ExpiryDate').value;
+        if (new Date(expiryDate) <= new Date()) {
+            e.preventDefault();
+            alert("Дата истечения срока действия карты должна быть в будущем.");
+        }
+    });
+</script>

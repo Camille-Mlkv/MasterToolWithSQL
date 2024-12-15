@@ -10,8 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseNpgsql(connectionString));
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+        npgsqlOptions.UseNodaTime()));
 
 builder.Services.AddScoped<IRawSqlRepository, RawSqlRepository>();
 
@@ -21,6 +24,10 @@ builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<FeedbackService>();
 builder.Services.AddScoped<DetailService>();
 builder.Services.AddScoped<PickupPointService>();
+builder.Services.AddScoped<RequestService>();
+builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<CardService>();
+builder.Services.AddScoped<PaymentInfoService>();   
 
 var app = builder.Build();
 

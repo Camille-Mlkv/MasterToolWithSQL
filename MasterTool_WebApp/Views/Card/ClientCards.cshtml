@@ -1,0 +1,101 @@
+﻿@model List<CreditCard>
+
+<h2 class="text-center mb-4">Your cards</h2>
+
+<div class="text-right mb-3">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fas fa-plus"></i> Add card
+    </a>
+</div>
+
+<div class="card-container">
+    @foreach (var card in Model)
+    {
+        <div class="card">
+            <div class="card-front">
+                <div class="card-logo">
+                    @if (card.CardType == "Visa")
+                    {
+                        <i class="fab fa-cc-visa"></i> 
+                    }
+                    else if (card.CardType == "MasterCard")
+                    {
+                        <i class="fab fa-cc-mastercard"></i> 
+                    }
+                </div>
+                <div class="card-number">
+                    @card.CardNumber.Substring(0, 4) @card.CardNumber.Substring(4, 4) @card.CardNumber.Substring(8, 4) @card.CardNumber.Substring(12, 4)
+                </div>
+                <div class="card-expiry">
+                    Exp: @card.ExpiryDate
+                </div>
+            </div>
+            <div class="card-back">
+                <div class="cvv">
+                    CVV: @card.CVV
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .card {
+        width: 330px;
+        height: 180px;
+        border-radius: 10px;
+        background: linear-gradient(to right, #4e54c8, #8f94fb); /* Градиент для фона карты */
+        color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .card .card-front, .card .card-back {
+        padding: 20px;
+    }
+
+    .card-logo {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .card-number {
+        font-size: 20px;
+        letter-spacing: 3px;
+        margin-top: 30px;
+        word-wrap: break-word;
+    }
+
+    .card-expiry {
+        font-size: 14px;
+        margin-top: 20px;
+    }
+
+    .card-back {
+        background-color: #333; /* Темный фон для оборота карты */
+        color: #fff;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 20px;
+        display: none; /* По умолчанию скрыть оборот карты */
+    }
+
+    .card:hover .card-back {
+        display: block; /* Показываем оборот при наведении */
+    }
+
+    .card .cvv {
+        font-size: 16px;
+        margin-top: 20px;
+    }
+</style>

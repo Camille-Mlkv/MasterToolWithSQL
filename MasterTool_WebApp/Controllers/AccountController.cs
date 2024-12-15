@@ -77,6 +77,7 @@ namespace MasterTool_WebApp.Controllers
                     return View(model);
                 }
                 CurrentUser.UserName = model.UserName;
+                CurrentUser.UserId = users.First().UserId;
 
                 int? roleId = users.First().RoleId;
                 var roles = await _roleService.GetRoleByIdAsync(roleId);

@@ -1,0 +1,83 @@
+﻿@model List<Order>
+
+<h2>Orders</h2>
+
+<!-- Таблица для неготовых заказов -->
+<h3>Not Ready Orders</h3>
+@if (Model.Any(o => !o.IsReady))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Creation Date</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var order in Model.Where(o => !o.IsReady))
+            {
+                <tr style="cursor: pointer;" onclick="window.location.href='@Url.Action("OrderDetails", "Order",new { orderId = @order.OrderId })'">
+                    <td>@i</td>
+                    <td>@order.CreationDate</td>
+                    <td>@order.TotalPrice</td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>All orders are ready.</p>
+}
+
+<hr>
+
+<!-- Таблица для готовых заказов -->
+<h3>Ready Orders</h3>
+@if (Model.Any(o => o.IsReady))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Creation Date</th>
+                <th>Total Price</th>
+                <th>Статус оплаты</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int j = 1;
+            }
+            @foreach (var order in Model.Where(o => o.IsReady))
+            {
+                <tr style="cursor: pointer;" onclick="window.location.href='@Url.Action("OrderDetails", "Order",new { orderId = @order.OrderId })'">
+                    <td>@j</td>
+                    <td>@order.CreationDate</td>
+                    <td>@order.TotalPrice</td>
+                    <td>
+                        @if (order.IsPaid)
+                        {
+                            <i class="fas fa-check-circle" style="color: green;" title="Оплачено"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-times-circle" style="color: red;" title="Не оплачено"></i>
+                        }
+                    </td>
+                </tr>
+                j++;
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No ready orders.</p>
+}
+

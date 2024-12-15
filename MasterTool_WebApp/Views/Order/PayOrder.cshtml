@@ -1,0 +1,89 @@
+﻿@model MasterTool_WebApp.ViewModels.PayOrderViewModel
+
+    <h1>Оплата заказа</h1>
+    <p>Вы оплачиваете заказ <strong>№@Model.OrderId</strong> на сумму <strong>@Model.TotalPrice.ToString("C")</strong>.</p>
+
+    <form asp-action="PayOrder" method="post">
+        <input type="hidden" asp-for="OrderId" />
+        <input type="hidden" asp-for="TotalPrice"/>
+
+        <div class="form-group">
+            <label asp-for="SelectedCardId" class="control-label">Выберите карту для оплаты:</label>
+            <select asp-for="SelectedCardId" class="form-control">
+                <option value="" disabled selected>-- Выберите карту --</option>
+                @foreach (var card in Model.ClientCards)
+                {
+                    <option value="@card.CardId">@card.CardNumber</option>
+                }
+            </select>
+            <span asp-validation-for="SelectedCardId" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn">Оплатить</button>
+    </form>
+
+
+
+<style>
+
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        text-align: center;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    .alert {
+        color: #555;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+</style>
