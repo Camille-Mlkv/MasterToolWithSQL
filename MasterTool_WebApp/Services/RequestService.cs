@@ -1,4 +1,5 @@
-﻿using MasterTool_WebApp.Models;
+﻿using MasterTool_WebApp.LocalData;
+using MasterTool_WebApp.Models;
 using MasterTool_WebApp.Services.Repository;
 using Npgsql;
 
@@ -46,5 +47,36 @@ namespace MasterTool_WebApp.Services
 
             await _rawSqlRepository.ExecuteNonQueryAsync(query, parameters);
         }
+
+
+        public async Task<List<Request>> GetOpenRequestsAsync()
+        {
+            string query = @"SELECT *
+                            FROM requests
+                            WHERE is_order=false";
+            return await _rawSqlRepository.ExecuteRawSqlQueryAsync<Request>(query);
+        }
+
+        public async Task RequestToOrderAsync(int requestId)
+        {
+            // create an order
+            var isPaid = false;
+            var totalPrice = 0;
+
+            string query = @"
+                INSERT INTO orders (master_id, request_id, is_paid, total_price)
+                VALUES (@MasterId, @RequestId, @IsPaid, @TotalPrice)";
+
+            var parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@MasterId", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = CurrentUser.UserId },
+                new NpgsqlParameter("@RequestId", NpgsqlTypes.NpgsqlDbType.Bigint) { Value = requestId },
+                new NpgsqlParameter("@IsPaid", NpgsqlTypes.NpgsqlDbType.Boolean) { Value = isPaid },
+                new NpgsqlParameter("@TotalPrice", NpgsqlTypes.NpgsqlDbType.Numeric) { Value = totalPrice }
+            };
+
+            await _rawSqlRepository.ExecuteNonQueryAsync(query, parameters);
+        }
+
     }
 }

@@ -1,0 +1,91 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<Detail>
+@{
+    ViewData["Title"] = "Details for Master";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Details for Order @ViewBag.OrderId</h2>
+
+    <div class="row">
+        @foreach (var detail in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 detail-card" data-detail-id="@detail.DetailId">
+                    <div class="card-body">
+                        <h5 class="card-title">@detail.Name</h5>
+                        <p class="card-text">
+                            <strong>Description:</strong> @detail.Name
+                            <strong>Price:</strong> @detail.Price.ToString("C") <br />
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-primary btn-select-detail" data-bs-toggle="modal" data-bs-target="#detailModal"
+                                data-detail-id="@detail.DetailId" data-detail-name="@detail.Name" 
+                                data-detail-price="@detail.Price" data-detail-amount="@detail.Amount">
+                            Select
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Add Detail</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addDetailForm" asp-action="AddDetailToOrder" method="post">
+                    <input type="hidden" name="OrderId" value="@ViewBag.OrderId" />
+                    <input type="hidden" id="detailIdInput" name="DetailId" value="" />
+                    <div class="mb-3">
+                        <label for="detailNameInput" class="form-label">Detail</label>
+                        <input type="text" id="detailNameInput" class="form-control" value="" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label for="detailPriceInput" class="form-label">Price</label>
+                        <input type="text" id="detailPriceInput" class="form-control" value="" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantityInput" class="form-label">Quantity</label>
+                        <input type="number" id="quantityInput" name="Quantity" class="form-control" value="1" min="1" max="1" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Обработчик клика на кнопке выбора детали
+        document.querySelectorAll(".btn-select-detail").forEach(button => {
+            button.addEventListener("click", function () {
+                const detailId = this.getAttribute("data-detail-id");
+                const detailName = this.getAttribute("data-detail-name");
+                const detailPrice = this.getAttribute("data-detail-price");
+                const detailAmount = this.getAttribute("data-detail-amount");
+
+                document.getElementById("detailIdInput").value = detailId;
+                document.getElementById("detailNameInput").value = detailName;
+                document.getElementById("detailPriceInput").value = detailPrice;
+                document.getElementById("quantityInput").max = detailAmount;
+                //document.getElementById("quantityInput").value = 1;
+
+            });
+        });
+    });
+</script>

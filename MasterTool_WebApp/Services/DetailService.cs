@@ -84,5 +84,79 @@ namespace MasterTool_WebApp.Services
 
             await _rawSqlRepository.ExecuteNonQueryAsync(query, parameters);
         }
+
+        public async Task AddDetailToOrder(int orderId, int detailId, int quantity)
+        {
+            //string query = @"INSERT INTO orders_details (order_id, detail_id, used_amount) 
+            //         VALUES (@OrderId, @DetailId, @UsedAmount)";
+
+            //var parameters = new[]
+            //{
+            //    new NpgsqlParameter("@OrderId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = orderId },
+            //    new NpgsqlParameter("@DetailId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = detailId },
+            //    new NpgsqlParameter("@UsedAmount", NpgsqlTypes.NpgsqlDbType.Integer) { Value = quantity }
+            //};
+            //await _rawSqlRepository.ExecuteNonQueryAsync(query, parameters);
+            // Запрос для проверки, существует ли уже такая запись
+            string checkQuery = @"SELECT *
+                          FROM orders_details
+                          WHERE order_id = @OrderId AND detail_id = @DetailId";
+
+            var checkParameters = new[]
+            {
+                new NpgsqlParameter("@OrderId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = orderId },
+                new NpgsqlParameter("@DetailId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = detailId }
+            };
+
+            // Выполняем запрос, чтобы проверить, существует ли запись
+            var existingRecord = await _rawSqlRepository.ExecuteRawSqlQueryAsync<OrderDetail>(checkQuery, checkParameters);
+
+            if (existingRecord.Count > 0)
+            {
+                string updateQuery = @"UPDATE orders_details
+                               SET used_amount = used_amount + @UsedAmount
+                               WHERE order_id = @OrderId AND detail_id = @DetailId";
+
+                var updateParameters = new[]
+                {
+                    new NpgsqlParameter("@OrderId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = orderId },
+                    new NpgsqlParameter("@DetailId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = detailId },
+                    new NpgsqlParameter("@UsedAmount", NpgsqlTypes.NpgsqlDbType.Integer) { Value = quantity }
+                };
+
+                await _rawSqlRepository.ExecuteNonQueryAsync(updateQuery, updateParameters);
+            }
+            else
+            {
+                // Если записи нет, вставляем новую
+                string insertQuery = @"INSERT INTO orders_details (order_id, detail_id, used_amount) 
+                               VALUES (@OrderId, @DetailId, @UsedAmount)";
+
+                var insertParameters = new[]
+                {
+                    new NpgsqlParameter("@OrderId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = orderId },
+                    new NpgsqlParameter("@DetailId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = detailId },
+                    new NpgsqlParameter("@UsedAmount", NpgsqlTypes.NpgsqlDbType.Integer) { Value = quantity }
+                };  
+
+                await _rawSqlRepository.ExecuteNonQueryAsync(insertQuery, insertParameters);
+            }
+        }
+
+
+        public async Task<List<OrderDetailViewModel>> GetDetailsForOrder(int orderId)
+        {
+            string query = @"SELECT d.name, od.used_amount, d.price
+                     FROM orders_details od
+                     JOIN details d ON od.detail_id = d.detail_id
+                     WHERE od.order_id = @OrderId";
+
+            var parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@OrderId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = orderId }
+            };
+
+            return await _rawSqlRepository.ExecuteRawSqlQueryAsync<OrderDetailViewModel>(query, parameters);
+        }
     }
 }

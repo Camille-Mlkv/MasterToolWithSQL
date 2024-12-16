@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<MasterTool_WebApp.Models.Request>
+
+<h2>Open Requests</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Problem Description</th>
+                <th>Manufacturer Name</th>
+                <th>Usage Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in Model.Select((r, index) => new { Request = r, Index = index + 1 }))
+            {
+                <tr>
+                    <td>@request.Index</td>
+                    <td>@request.Request.ProblemDescription</td>
+                    <td>@request.Request.ManufacturerName</td>
+                    <td>@request.Request.UsageTime</td>
+                    <td>
+                        <form asp-action="Respond" asp-controller="Request" asp-route-requestId="@request.Request.RequestId" method="post">
+                            <input type="hidden" name="requestId" value="@request.Request.RequestId" />
+                            <button type="submit" class="btn btn-primary">Откликнуться</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No open requests available.</p>
+}

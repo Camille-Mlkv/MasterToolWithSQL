@@ -17,6 +17,7 @@ namespace MasterTool_WebApp.Data
         public DbSet<Detail> Details { get; set; }
         public DbSet<CreditCard> CreditCards { get; set; }
        // public DbSet<PaymentInfo> PaymentInfos { get; set; }
+       public DbSet<OrderDetail> OrderDetailss { get; set; }
        public DbSet<Feedback> Feedbacks { get; set; } 
         public DbSet<ClientWithInfoViewModel> ClientsWithInfo { get; set; }
         public DbSet<MasterWithInfoViewModel> MasterWithInfo { get; set; }
@@ -24,6 +25,7 @@ namespace MasterTool_WebApp.Data
         public DbSet<OrderDetailsViewModel> OrderDetails { get; set; }
         public DbSet<PayOrderViewModel> PayOrderModels { get; set; }
         public DbSet<PaymentInfoViewModel> PaymentInfoViewModels { get; set; }
+        public DbSet<OrderDetailViewModel> OrderDetailViewModels { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -57,6 +59,16 @@ namespace MasterTool_WebApp.Data
             });
 
             modelBuilder.Entity<PaymentInfoViewModel>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<OrderDetailViewModel>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<OrderDetail>(entity =>
             {
                 entity.HasNoKey();
             });

@@ -1,4 +1,5 @@
-﻿@model MasterTool_WebApp.ViewModels.OrderDetailsViewModel
+﻿@using MasterTool_WebApp.LocalData;
+@model MasterTool_WebApp.ViewModels.OrderDetailsViewModel
 
 <!DOCTYPE html>
 <html>
@@ -70,29 +71,47 @@
             <p><strong>Стоимость услуги:</strong> @Model.ServicePrice.ToString("C")</p>
         </div>
 
-        <div class="info-section">
-            <h3>Информация о мастере</h3>
-            <p><strong>Мастер:</strong> @Model.MasterName</p>
+        @if (CurrentUser.IsClient)
+        {
+            <div>
+                @if (!Model.IsPaid)
+                {
+                    <div class="text-right mb-3">
+                        <a asp-action="PayOrder" asp-route-orderId="@Model.OrderId" asp-route-orderPrice="@Model.TotalPrice.ToString("F2")" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Pay
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-right mb-3">
+                        <a asp-action="LeaveFeedback" asp-route-orderId="@Model.OrderId" asp-controller="Feedback" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Feedback
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+        @if (CurrentUser.IsMaster)
+        {
+            <div class="text-right mb-3">
+                <a asp-controller="Detail" asp-action="DetailsForMaster" asp-route-orderId="@Model.OrderId" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Add Details
+                </a>
+            </div>
+            <div class="text-right mb-3">
+                <a asp-controller="Order" asp-action="MarkOrderAsReady" asp-route-orderId="@Model.OrderId" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Mark as ready
+                </a>
+            </div>
+        }
+
+        <div class="text-right mb-3">
+            <a asp-controller="Detail" asp-action="DetailsForOrder" asp-route-orderId="@Model.OrderId" class="btn btn-info">
+                View Used Details
+            </a>
         </div>
 
-        <div>
-            @if (!Model.IsPaid)
-            {
-                <div class="text-right mb-3">
-                    <a asp-action="PayOrder" asp-route-orderId="@Model.OrderId" asp-route-orderPrice="@Model.TotalPrice.ToString("F2")" class="btn btn-success">
-                        <i class="fas fa-plus"></i> Pay
-                    </a>
-                </div>
-            }
-            else
-            {
-                <div class="text-right mb-3">
-                    <a asp-action="LeaveFeedback" asp-route-orderId="@Model.OrderId" asp-controller="Feedback" class="btn btn-success">
-                        <i class="fas fa-plus"></i> Feedback
-                    </a>
-                </div>
-            }
-        </div>
     </div>
 </body>
 </html>

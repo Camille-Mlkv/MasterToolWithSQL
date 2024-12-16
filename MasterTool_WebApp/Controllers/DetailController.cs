@@ -1,6 +1,7 @@
 ﻿using MasterTool_WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using MasterTool_WebApp.Models;
+using Npgsql;
 
 namespace MasterTool_WebApp.Controllers
 {
@@ -57,6 +58,36 @@ namespace MasterTool_WebApp.Controllers
             await _detailService.DeleteDetailAsync(id);
             var details = await _detailService.GetDetailsAsync();
             return View("Index", details);
+        }
+
+        public async Task<IActionResult> DetailsForMaster(int orderId)
+        {
+            ViewBag.OrderId = orderId;
+            var details = await _detailService.GetDetailsAsync();
+            return View(details);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDetailToOrder(int orderId, int detailId, int quantity)
+        {
+            // Валидация входных данных
+            if (orderId <= 0 || detailId <= 0 || quantity <= 0)
+            {
+                ModelState.AddModelError("", "Invalid input data.");
+                return RedirectToAction("DetailsForMaster", new { orderId });
+            }
+
+            await _detailService.AddDetailToOrder(orderId, detailId, quantity);
+
+            var details = await _detailService.GetDetailsAsync();
+            return View("DetailsForMaster", details);
+
+        }
+
+        public async Task<IActionResult> DetailsForOrder(int orderId)
+        {
+            var details=await _detailService.GetDetailsForOrder(orderId);
+            return View(details);
         }
     }
 }

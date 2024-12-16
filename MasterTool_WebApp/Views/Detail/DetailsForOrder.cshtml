@@ -1,0 +1,35 @@
+﻿@model List<MasterTool_WebApp.ViewModels.OrderDetailViewModel>
+
+<h2>Order Details</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Detail Name</th>
+                <th>Quantity</th>
+                <th>Price per unit</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model)
+            {
+                <tr>
+                    <td>@detail.Name</td>
+                    <td>@detail.Quantity</td>
+                    <td>@detail.Price</td>
+                    <td>@(detail.Price * detail.Quantity)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="text-right">
+        <h4>Total Price: @Model.Sum(d => d.Price * d.Quantity).ToString("F2")</h4> <!-- Общая стоимость -->
+    </div>
+}
+else
+{
+    <p>No details for this order.</p>
+}

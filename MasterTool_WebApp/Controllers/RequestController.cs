@@ -24,12 +24,26 @@ namespace MasterTool_WebApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> OpenRequests()
+        {
+            var requests = await _requestService.GetOpenRequestsAsync();
+            return View(requests);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Respond(int requestId)
+        {
+            await _requestService.RequestToOrderAsync(requestId);
+            //update
+            var requests = await _requestService.GetOpenRequestsAsync();
+            return View("OpenRequests",requests);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
-            // Загружаем список доступных услуг
             var services = await _servicesService.GetServicesAsync();
 
-            // Передаем ViewModel с предзаполненным списком услуг
             var model = new CreateRequestViewModel
             {
                 Services = services

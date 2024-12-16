@@ -31,7 +31,20 @@ namespace MasterTool_WebApp.Services
             return await _rawSqlRepository.ExecuteRawSqlQueryAsync<Order>(query, parameters);
         }
 
-        public async Task<List<OrderDetailsViewModel>> GetClientOrderDetails(int orderId)
+        public async Task<List<Order>> GetMasterOrdersAsync(long masterId)
+        {
+            string query = @"
+                            SELECT o.*
+                            FROM orders o
+                            WHERE o.master_id = @MasterId";
+            var parameters = new NpgsqlParameter[]
+            {
+                new NpgsqlParameter("@MasterId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = masterId }
+            };
+            return await _rawSqlRepository.ExecuteRawSqlQueryAsync<Order>(query, parameters);
+        }
+
+        public async Task<List<OrderDetailsViewModel>> OrderDetails(int orderId)
         {
             string sql = @"
                 SELECT 
@@ -90,6 +103,20 @@ namespace MasterTool_WebApp.Services
             };
 
             await _rawSqlRepository.ExecuteNonQueryAsync(query2, parameters2);
+        }
+
+        public async Task MarkOrderAsReady(int orderId)
+        {
+            string query = @"UPDATE orders
+                         SET is_ready = TRUE
+                         WHERE order_id = @OrderId";
+
+            var parameters = new[]
+            {
+                new NpgsqlParameter("@OrderId", NpgsqlTypes.NpgsqlDbType.Integer) { Value = orderId }
+            };
+
+            await _rawSqlRepository.ExecuteNonQueryAsync(query, parameters);
         }
     }
 }
